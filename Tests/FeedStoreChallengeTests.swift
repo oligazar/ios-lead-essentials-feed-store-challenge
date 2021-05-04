@@ -33,9 +33,9 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	}
 	
 	func test_retrieve_deliversFoundValuesOnNonEmptyCache() throws {
-//		let sut = try makeSUT()
-//
-//		assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
+		let sut = try makeSUT()
+
+		assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
 	}
 	
 	func test_retrieve_hasNoSideEffectsOnNonEmptyCache() throws {
@@ -92,13 +92,13 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 //		assertThatSideEffectsRunSerially(on: sut)
 	}
 	
-	// - MARK: Helpers
+	// MARK: Helpers
 	
 	private func makeSUT() throws -> FeedStore {
-		let sut = CoreDataFeedStore()
+		let bundle = Bundle.init(for: CoreDataFeedStore.self)
+		let sut = try! CoreDataFeedStore(bundle: bundle)
 		return sut
 	}
-	
 }
 
 //  ***********************
