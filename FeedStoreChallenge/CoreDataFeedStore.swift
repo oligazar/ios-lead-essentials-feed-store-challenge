@@ -27,15 +27,8 @@ public class CoreDataFeedStore: FeedStore {
 			do {
 				let cache = ManagedCache(context: context)
 				cache.timestamp = timestamp
-				let managedFeed: [ManagedFeedImage] = feed.map { local in
-					let managed = ManagedFeedImage(context: context)
-					managed.id = local.id
-					managed.imageDescription = local.description
-					managed.location = local.location
-					managed.url = local.url
-					return managed
-				}
-				cache.feed = NSOrderedSet(array: managedFeed)
+				cache.feed = ManagedFeedImage.images(from: feed, in: context)
+				
 				try context.save()
 				completion(nil)
 			} catch {
@@ -79,6 +72,17 @@ class ManagedFeedImage: NSManagedObject {
 	
 	internal var local: LocalFeedImage {
 		return LocalFeedImage(id: id, description: imageDescription, location: location, url: url)
+	}
+	
+	internal static func images(from localFeed: [LocalFeedImage], in context: NSManagedObjectContext) -> NSOrderedSet {
+		return NSOrderedSet(array: localFeed.map { local in
+			let managed = ManagedFeedImage(context: context)
+			managed.id = local.id
+			managed.imageDescription = local.description
+			managed.location = local.location
+			managed.url = local.url
+			return managed
+		})
 	}
 }
 
