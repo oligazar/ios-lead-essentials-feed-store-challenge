@@ -41,13 +41,11 @@ public class CoreDataFeedStore: FeedStore {
 		let context = self.context
 		context.perform {
 			do {
-				let request = NSFetchRequest<ManagedCache>(entityName: "ManagedCache")
-				request.returnsDistinctResults = false
-				guard let cache = try context.fetch(request).first else {
-					return completion(.empty)
+				if let cache = try ManagedCache.find(in: context) {
+					completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
+				} else {
+					completion(.empty)
 				}
-				let feed = cache.feed.compactMap { ($0 as? ManagedFeedImage)?.local }
-				completion(.found(feed: feed, timestamp: cache.timestamp))
 			} catch {
 				completion(.failure(error))
 			}
@@ -60,6 +58,17 @@ public class CoreDataFeedStore: FeedStore {
 class ManagedCache: NSManagedObject {
 	@NSManaged var timestamp: Date
 	@NSManaged var feed: NSOrderedSet
+	
+	static func find(in context: NSManagedObjectContext) throws -> ManagedCache? {
+		let request = NSFetchRequest<ManagedCache>(entityName: self.className())
+		request.returnsDistinctResults = false
+
+		return try context.fetch(request).first
+	}
+	
+	internal var localFeed: [LocalFeedImage] {
+		return feed.compactMap { ($0 as? ManagedFeedImage)?.local }
+	}
 }
 
 @objc(ManagedFeedImage)
