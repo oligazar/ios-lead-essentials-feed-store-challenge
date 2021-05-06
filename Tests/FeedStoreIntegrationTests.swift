@@ -93,12 +93,6 @@ class FeedStoreIntegrationTests: XCTestCase {
 	
 	private func undoStoreSideEffects() throws {
 		
-	}
-	
-	private func trackMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
-		addTeardownBlock { [weak instance] in
-			XCTAssertNil(instance, "Instance should've been dallocated. Potential memory leak", file: file, line: line)
-		}
-	}
+	}	
 	
 }
