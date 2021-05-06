@@ -17,7 +17,7 @@ internal class ManagedCache: NSManagedObject {
 extension ManagedCache {
 	
 	internal static func find(in context: NSManagedObjectContext) throws -> ManagedCache? {
-		let request = NSFetchRequest<ManagedCache>(entityName: self.className())
+		let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
 		request.returnsDistinctResults = false
 
 		return try context.fetch(request).first
