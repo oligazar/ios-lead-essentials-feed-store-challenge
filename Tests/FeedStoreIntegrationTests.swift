@@ -75,7 +75,7 @@ class FeedStoreIntegrationTests: XCTestCase {
 		let storeURL = testSpecificStoreURL()
 		let storeBundle = Bundle(for: CoreDataFeedStore.self)
 		let sut = try CoreDataFeedStore(storeURL: storeURL, bundle: storeBundle)
-		
+		trackMemoryLeaks(sut)
 		return sut
 	}
 	
@@ -93,6 +93,12 @@ class FeedStoreIntegrationTests: XCTestCase {
 	
 	private func undoStoreSideEffects() throws {
 		
+	}
+	
+	private func trackMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+		addTeardownBlock { [weak instance] in
+			XCTAssertNil(instance, "Instance should've been dallocated. Potential memory leak", file: file, line: line)
+		}
 	}
 	
 }
