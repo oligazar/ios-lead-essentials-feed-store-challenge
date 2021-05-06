@@ -17,11 +17,11 @@ class FeedStoreIntegrationTests: XCTestCase {
 	override func setUpWithError() throws {
 		try super.setUpWithError()
 		
-		try setupEmptyStoreState()
+		setupEmptyStoreState()
 	}
 	
 	override func tearDownWithError() throws {
-		try undoStoreSideEffects()
+		undoStoreSideEffects()
 		
 		try super.tearDownWithError()
 	}
@@ -87,12 +87,16 @@ class FeedStoreIntegrationTests: XCTestCase {
 		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
 	}
 	
-	private func setupEmptyStoreState() throws {
-		
+	private func setupEmptyStoreState() {
+		removeStorageArtifacts()
 	}
 	
-	private func undoStoreSideEffects() throws {
-		
-	}	
+	private func undoStoreSideEffects() {
+		removeStorageArtifacts()
+	}
+	
+	private func removeStorageArtifacts() {
+		try? FileManager.default.removeItem(at: testSpecificStoreURL())
+	}
 	
 }
