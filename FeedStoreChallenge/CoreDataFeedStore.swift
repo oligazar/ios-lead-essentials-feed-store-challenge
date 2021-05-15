@@ -31,15 +31,8 @@ public final class CoreDataFeedStore: FeedStore {
 	public func retrieve(completion: @escaping RetrievalCompletion) {
 		perform { context in
 			do {
-				let request = NSFetchRequest<ManagedCache>(entityName: "ManagedCache")
-				if let managedCache = try context.fetch(request).first {
-					let localFeed: [LocalFeedImage] = managedCache.feed.map { managed in
-						let xxx = managed as! ManagedFeedImage
-						let local = LocalFeedImage(id: xxx.id, description: xxx.imageDescription, location: xxx.location, url: xxx.url)
-						return local
-					}
-					completion(.found(feed: localFeed, timestamp: managedCache.timestamp))
-
+				if let managedCache = try ManagedCache.find(in: context) {
+					completion(.found(feed: managedCache.localFeed, timestamp: managedCache.timestamp))
 				} else {
 					completion(.empty)
 				}
@@ -52,17 +45,9 @@ public final class CoreDataFeedStore: FeedStore {
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
 		perform { context in
 			do {
-				let managedFeed: [ManagedFeedImage] = feed.map { image in
-					let managedImage = ManagedFeedImage(context: context)
-					managedImage.id = image.id
-					managedImage.imageDescription = image.description
-					managedImage.location = image.location
-					managedImage.url = image.url
-					return managedImage
-				}
 				let cache = ManagedCache(context: context)
 				cache.timestamp = timestamp
-				cache.feed = NSOrderedSet(array: managedFeed)
+				cache.feed = ManagedFeedImage.images(from: feed, in: context)
 				try context.save()
 
 				completion(nil)
@@ -85,16 +70,43 @@ public final class CoreDataFeedStore: FeedStore {
 }
 
 @objc(ManagedCache)
-private class ManagedCache: NSManagedObject {
+class ManagedCache: NSManagedObject {
 	@NSManaged var timestamp: Date
 	@NSManaged var feed: NSOrderedSet
+
+	var localFeed: [LocalFeedImage] {
+		return feed.compactMap { ($0 as? ManagedFeedImage)?.local }
+	}
+
+	static func find(in context: NSManagedObjectContext) throws -> ManagedCache? {
+		guard let entityName = ManagedCache.entity().name else { return nil }
+		let request = NSFetchRequest<ManagedCache>(entityName: entityName)
+		request.returnsDistinctResults = false
+
+		return try context.fetch(request).first
+	}
 }
 
 @objc(ManagedFeedImage)
-private class ManagedFeedImage: NSManagedObject {
+class ManagedFeedImage: NSManagedObject {
 	@NSManaged var id: UUID
 	@NSManaged var imageDescription: String?
 	@NSManaged var location: String?
 	@NSManaged var url: URL
 	@NSManaged var cache: ManagedCache
+
+	var local: LocalFeedImage {
+		return LocalFeedImage(id: id, description: imageDescription, location: location, url: url)
+	}
+
+	static func images(from feed: [LocalFeedImage], in context: NSManagedObjectContext) -> NSOrderedSet {
+		return NSOrderedSet(array: feed.map { local in
+			let managed = ManagedFeedImage(context: context)
+			managed.id = local.id
+			managed.imageDescription = local.description
+			managed.location = local.location
+			managed.url = local.url
+			return managed
+		})
+	}
 }
