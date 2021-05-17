@@ -28,7 +28,6 @@ extension ManagedCache {
 	static func find(in context: NSManagedObjectContext) throws -> ManagedCache? {
 		guard let entityName = ManagedCache.entity().name else { return nil }
 		let request = NSFetchRequest<ManagedCache>(entityName: entityName)
-		request.returnsDistinctResults = false
 
 		return try context.fetch(request).first
 	}
