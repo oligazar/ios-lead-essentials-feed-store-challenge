@@ -12,7 +12,9 @@ import CoreData
 internal class ManagedCache: NSManagedObject {
 	@NSManaged var timestamp: Date
 	@NSManaged var feed: NSOrderedSet
+}
 
+extension ManagedCache {
 	internal static func newUniqueInstance(context: NSManagedObjectContext) throws -> ManagedCache {
 		try find(in: context).map(context.delete)
 
