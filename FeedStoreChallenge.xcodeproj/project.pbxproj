@@ -23,6 +23,7 @@
 		08F35C7B2616166600AFE277 /* XCTestCase+FailableInsertFeedStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F35C782616166600AFE277 /* XCTestCase+FailableInsertFeedStoreSpecs.swift */; };
 		84ABBEA3264FD1F2000953AF /* FeedStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84ABBEA1264FD1F2000953AF /* FeedStore.xcdatamodeld */; };
 		84ABBEAF26522ED6000953AF /* ManagedCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ABBEAE26522ED6000953AF /* ManagedCache.swift */; };
+		84ABBEB326522F61000953AF /* ManagedFeedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ABBEB226522F61000953AF /* ManagedFeedImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		08F35C782616166600AFE277 /* XCTestCase+FailableInsertFeedStoreSpecs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableInsertFeedStoreSpecs.swift"; sourceTree = "<group>"; };
 		84ABBEA2264FD1F2000953AF /* FeedStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedStore.xcdatamodel; sourceTree = "<group>"; };
 		84ABBEAE26522ED6000953AF /* ManagedCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedCache.swift; sourceTree = "<group>"; };
+		84ABBEB226522F61000953AF /* ManagedFeedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedFeedImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 				08F35C6E261612AE00AFE277 /* CoreDataFeedStore.swift */,
 				84ABBEA1264FD1F2000953AF /* FeedStore.xcdatamodeld */,
 				84ABBEAE26522ED6000953AF /* ManagedCache.swift */,
+				84ABBEB226522F61000953AF /* ManagedFeedImage.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				08CB21D1261632DB00751C29 /* CoreDataHelpers.swift in Sources */,
 				84ABBEA3264FD1F2000953AF /* FeedStore.xcdatamodeld in Sources */,
 				08F35C6F261612AE00AFE277 /* CoreDataFeedStore.swift in Sources */,
+				84ABBEB326522F61000953AF /* ManagedFeedImage.swift in Sources */,
 				08CE2BA62285BCB600183A1B /* FeedStore.swift in Sources */,
 				08CE2BA82285BCC600183A1B /* LocalFeedImage.swift in Sources */,
 			);
